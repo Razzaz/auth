@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/otp-authenticator.iml" filepath="$PROJECT_DIR$/otp-authenticator.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/otp-authenticator-master.iml" filepath="$PROJECT_DIR$/.idea/modules/otp-authenticator-master.iml" group="otp-authenticator-master" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/otp-authenticator-master-app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/otp-authenticator-master-app.iml" group="otp-authenticator-master/app" />
+    </modules>
+  </component>
+</project>
