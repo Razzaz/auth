@@ -17,7 +17,6 @@ public class EntriesAdapter extends BaseAdapter {
     private List<Entry> entries;
     private Entry currentSelection;
 
-
     @Override
     public int getCount() {
         return getEntries().size();
@@ -50,51 +49,45 @@ public class EntriesAdapter extends BaseAdapter {
             v.setBackgroundColor(parent.getResources().getColor(R.color.primary_light));
         }
 
-
-
-        final TextView tt1 = (TextView) v.findViewById(R.id.textViewLabel);
+        final TextView tt1 = v.findViewById(R.id.textViewLabel);
         tt1.setText(getItem(position).getLabel());
 
-        TextView tt2 = (TextView) v.findViewById(R.id.textViewOTP);
+        //TextView tt2 = v.findViewById(R.id.textViewOTP);
         v.setTag(position);
-        tt2.setText(getItem(position).getCurrentOTP());
+        //tt2.setText(getItem(position).getCurrentOTP());
 
 
-        v.setOnDragListener(new View.OnDragListener() {
+        v.setOnDragListener((v1, event) -> {
 
-            @Override
-            public boolean onDrag(View v, DragEvent event) {
+            final int action = event.getAction();
+            switch (action) {
+                case DragEvent.ACTION_DRAG_STARTED:
+                    break;
 
-                final int action = event.getAction();
-                switch (action) {
-                    case DragEvent.ACTION_DRAG_STARTED:
-                        break;
+                case DragEvent.ACTION_DRAG_EXITED:
+                    break;
 
-                    case DragEvent.ACTION_DRAG_EXITED:
-                        break;
+                case DragEvent.ACTION_DRAG_ENTERED:
+                    break;
 
-                    case DragEvent.ACTION_DRAG_ENTERED:
-                        break;
+                case DragEvent.ACTION_DROP: {
+                    int from = Integer.parseInt(event.getClipData().getDescription().getLabel()+"");
+                    int to = (Integer) v1.getTag();
+                    Entry e = getEntries().remove(from);
+                    getEntries().add(to, e);
+                    notifyDataSetChanged();
 
-                    case DragEvent.ACTION_DROP: {
-                        int from = Integer.parseInt(event.getClipData().getDescription().getLabel()+"");
-                        int to = (Integer) v.getTag();
-                        Entry e = getEntries().remove(from);
-                        getEntries().add(to, e);
-                        notifyDataSetChanged();
-
-                        return true;
-                    }
-
-                    case DragEvent.ACTION_DRAG_ENDED: {
-                        return true;
-                    }
-
-                    default:
-                        break;
+                    return true;
                 }
-                return true;
+
+                case DragEvent.ACTION_DRAG_ENDED: {
+                    return true;
+                }
+
+                default:
+                    break;
             }
+            return true;
         });
 
         v.setOnTouchListener(new View.OnTouchListener() {

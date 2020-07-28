@@ -69,7 +69,7 @@ public class MainActivity extends AppCompatActivity implements  ActionMode.Callb
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
        if(requestCode == PERMISSIONS_REQUEST_CAMERA) {
            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                // permission was granted
@@ -95,12 +95,7 @@ public class MainActivity extends AppCompatActivity implements  ActionMode.Callb
     private Entry nextSelection = null;
     private void showNoAccount(){
         Snackbar noAccountSnackbar = Snackbar.make(fab, R.string.no_accounts, Snackbar.LENGTH_INDEFINITE)
-                .setAction(R.string.button_add, new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        scanQRCode();
-                    }
-                });
+                .setAction(R.string.button_add, view -> scanQRCode());
         noAccountSnackbar.show();
     }
 
@@ -112,19 +107,16 @@ public class MainActivity extends AppCompatActivity implements  ActionMode.Callb
         //getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
 
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+
+        //Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        //setSupportActionBar(toolbar);
 
         fab = findViewById(R.id.action_scan);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                scanQRCode();
-            }
-        });
+        fab.setOnClickListener(view -> scanQRCode());
 
-        final ListView listView = (ListView) findViewById(R.id.listView);
-        final ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressBar);
+        final ListView listView = findViewById(R.id.listView);
+        final ProgressBar progressBar = findViewById(R.id.progressBar);
+        final TextView currentAccount = findViewById(R.id.currentAccount);
         final TextView currentOTP = findViewById(R.id.currentOTP);
 
         entries = SettingsHelper.load(this);
@@ -134,34 +126,22 @@ public class MainActivity extends AppCompatActivity implements  ActionMode.Callb
 
         listView.setAdapter(adapter);
 
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                nextSelection = entries.get(i);
-                itemIndex = i;
-                //Toast.makeText(MainActivity.this, i+"", Toast.LENGTH_SHORT).show();
-                //startActionMode(MainActivity.this);
-            }
+        listView.setOnItemClickListener((adapterView, view, i, l) -> {
+            nextSelection = entries.get(i);
+            itemIndex = i;
         });
 
-        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener(){
-
-            @Override
-            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
-                nextSelection = entries.get(i);
-                startActionMode(MainActivity.this);
-                return true;
-            }
+        listView.setOnItemLongClickListener((adapterView, view, i, l) -> {
+            nextSelection = entries.get(i);
+            startActionMode(MainActivity.this);
+            return true;
         });
 
-        currentOTP.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
-                ClipData clip = ClipData.newPlainText("copied", currentOTP.getText());
-                clipboard.setPrimaryClip(clip);
-                Toast.makeText(MainActivity.this, "Copied to clipboard", Toast.LENGTH_SHORT).show();
-            }
+        currentOTP.setOnClickListener(view -> {
+            ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+            ClipData clip = ClipData.newPlainText("copied", currentOTP.getText());
+            clipboard.setPrimaryClip(clip);
+            Toast.makeText(MainActivity.this, "Copied to clipboard", Toast.LENGTH_SHORT).show();
         });
 
         if(entries.isEmpty()){
@@ -188,16 +168,25 @@ public class MainActivity extends AppCompatActivity implements  ActionMode.Callb
 
                 //Toast.makeText(MainActivity.this, TOTPHelper.generate(adapter.getItem(itemIndex).getSecret()), Toast.LENGTH_SHORT).show();
                 if(adapter.getCount() != 0){
-                    currentOTP.setText(TOTPHelper.generate(adapter.getItem(itemIndex).getSecret()));
+                    String str = TOTPHelper.generate(adapter.getItem(itemIndex).getSecret());
+                    String[] equalStr = new String [2];
+                    int temp = 0;
 
+                    for(int i = 0; i < 6; i = i+3) {
+                        //Dividing string in n equal part using substring()
+                        String part = str.substring(i, i+3);
+                        equalStr[temp] = part;
+                        temp++;
+                    }
+                    currentAccount.setText(adapter.getItem(itemIndex).getLabel());
+                    currentOTP.setText(equalStr[0]+" "+equalStr[1]);
+                    //currentOTP.setText(TOTPHelper.generate(adapter.getItem(itemIndex).getSecret()));
                 }
                 else {
-                    currentOTP.setText("000000");
+                    currentOTP.setText("000 000");
                 }
 
-
                 adapter.notifyDataSetChanged();
-
                 handler.postDelayed(this, 1000);
             }
         };

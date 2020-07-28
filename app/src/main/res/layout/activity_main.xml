@@ -4,53 +4,51 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#40BBF4"
     android:fitsSystemWindows="true"
     tools:context="id.cyberarmy.authenticator.MainActivity">
 
     <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:theme="@style/AppTheme.AppBarOverlay">
+        android:layout_height="200dp"
+        android:background="#40BBF4"
+        android:gravity="center"
+        app:elevation="0dp">
 
-        <RelativeLayout
-            android:gravity="top"
-            android:background="?attr/colorPrimary"
+        <TextView
+            android:id="@+id/currentAccount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="account"
+            android:textSize="24sp"
+            android:fontFamily="@font/circularstdmedium"
+            android:layout_marginBottom="5dp"
+            android:textColor="#ffff"/>
+
+
+        <TextView
+            android:id="@+id/currentOTP"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="123 456"
+            android:fontFamily="@font/circularstdbold"
+            android:textColor="#ffffff"
+            android:textSize="60sp" />
 
-
-            <androidx.appcompat.widget.Toolbar
-                android:id="@+id/toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                android:background="?attr/colorPrimary"
-                app:popupTheme="@style/AppTheme.PopupOverlay" />
-
-            <ProgressBar
-                style="?android:attr/progressBarStyleHorizontal"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/progressBar"
-                android:max="3000"
-                android:progress="1500"
-                android:layout_below="@+id/toolbar"/>
-
-            <TextView
-                android:id="@+id/currentOTP"
-                android:layout_below="@+id/progressBar"
-                android:layout_width="match_parent"
-                android:layout_height="200dp"
-                android:textSize="50sp"
-                android:gravity="center"
-                android:text="123 456"/>
-
-        </RelativeLayout>
+        <ProgressBar
+            android:layout_marginTop="16dp"
+            android:id="@+id/progressBar"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:max="3000"
+            android:progress="1500"/>
 
     </com.google.android.material.appbar.AppBarLayout>
 
-
-
-    <include layout="@layout/content_main" />
+    <include layout="@layout/content_main"/>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/action_scan"
@@ -59,6 +57,6 @@
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
         android:src="@drawable/ic_add_white_24dp"
-        app:backgroundTint="#1DA1F2"></com.google.android.material.floatingactionbutton.FloatingActionButton>
+        app:backgroundTint="#40BBF4"/>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
